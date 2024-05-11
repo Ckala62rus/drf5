@@ -1,6 +1,8 @@
 from django.contrib.auth.models import Group, User
-from rest_framework import viewsets, permissions, serializers
-from rest_framework.decorators import permission_classes
+from django.http import JsonResponse
+
+from rest_framework import viewsets, permissions, serializers, status
+from rest_framework.decorators import permission_classes, api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -35,13 +37,31 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class SnippetSerializer(APIView):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    def get(self, request, pk, format=None) -> Response:
+        """Get method for categories.
 
-    def get(self, request, format=None):
+        Args:
+            request (_type_): _description_
+            pk (_type_): _description_
+            format (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            Response: _description_
         """
-        Create and return a new `Snippet` instance, given the validated data.
-        """
-        return Response({'a':'hello world'})
+        users = Categories.objects.all()
+        serializer_class = CategorySerializer(users, many=True)
+        # data = request.query_params
+        # return JsonResponse(dict(data), status=status.HTTP_200_OK)
+        ress = serializer_class.data
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         dataIn = request.data['name']
-        return Response({'a': 'hello world'})
+        return JsonResponse({'a': 'hello world'})
+
+    @api_view(['GET'])
+    def clear(request):
+        return JsonResponse({'testing': 'my custom function'})

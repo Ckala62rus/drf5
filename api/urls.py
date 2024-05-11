@@ -8,10 +8,12 @@ router.register("categories", views.CategoryViewSet)
 router.register("groups", views.GroupViewSet)
 router.register("users", views.UserViewSet)
 
-# router.register(r"test", views.SnippetSerializer, basename='MyModel')
+# router.urls.append('test/', views.SnippetSerializer.as_view())
 
 urlpatterns = [
     path('test/', views.SnippetSerializer.as_view(), name="instances"),
+    path('test/<int:pk>/', views.SnippetSerializer.as_view(), name="instances"),
+    path('test-test', views.SnippetSerializer.clear, name="instances"),
 ]
 
 urlpatterns.extend(router.urls)
