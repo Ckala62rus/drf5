@@ -1,8 +1,9 @@
 from django.contrib.auth.models import Group, User
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 
-from rest_framework import viewsets, permissions, serializers, status
-from rest_framework.decorators import permission_classes, api_view
+from rest_framework import viewsets, permissions, serializers, status, generics
+from rest_framework.decorators import permission_classes, api_view, action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -36,7 +37,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class SnippetSerializer(APIView):
+class SnippetSerializer(generics.GenericAPIView):
     """
     API endpoint that allows groups to be viewed or edited.
     """
@@ -62,6 +63,6 @@ class SnippetSerializer(APIView):
         dataIn = request.data['name']
         return JsonResponse({'a': 'hello world'})
 
-    @api_view(['GET'])
-    def clear(request):
+    @action(methods=['GET'], detail=False)
+    def clear(request: WSGIRequest) -> JsonResponse:
         return JsonResponse({'testing': 'my custom function'})
