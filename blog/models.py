@@ -46,6 +46,14 @@ class Posts(models.Model):
         to=Categories,
         on_delete=models.CASCADE
     )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+    )
 
     class Meta:
         # by default name app + class name.
