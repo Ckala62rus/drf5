@@ -46,6 +46,12 @@ class Posts(models.Model):
         to=Categories,
         on_delete=models.CASCADE
     )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name="Опубликовано?",
+        help_text="Опубликовать пост",
+        blank=False
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата создания",
