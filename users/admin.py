@@ -10,6 +10,7 @@ from users.models.users import User
 @admin.register(User)
 class UserAdmin(UserAdmin):
     readonly_fields = ("id",)
+    list_display_links = ["id", "username"]
     list_display = ("id", "username", "email", "first_name", "last_name", "is_staff")
     fieldsets = (
         (None, {
