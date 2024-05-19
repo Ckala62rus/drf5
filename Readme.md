@@ -19,4 +19,13 @@
 7. create migration => python manage.py makemigrations
 8. run migrations => python manage.py migrate
 9. create Swagger docs => python.exe .\manage.py spectacular --color --file schema.yml
-10. 
+
+
+#### Linux
+1. add user => adduser call_helper
+2. install if not exist => apt install sudo
+3. add permissions => usermod -aG sudo call_helper
+4. switch on user call_helper => su call_helper
+5. go to user directory => cd /home/call_helper
+6. install certbot => sudo api install certbot python3-certbot-nginx
+7. sudo certbot --nginx
