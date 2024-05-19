@@ -1,4 +1,4 @@
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
 from drf_spectacular.types import OpenApiTypes
@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 
 from api.serializers import CategorySerializer, GroupSerializer, UserSerializer, PostSerializer
 from blog.models import Categories, Posts
+from users.models.users import User
 
 
 # Create your views here.
