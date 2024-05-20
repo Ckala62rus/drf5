@@ -6,6 +6,7 @@ from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schem
 
 from rest_framework import viewsets, permissions, serializers, status, generics, mixins
 from rest_framework.decorators import permission_classes, api_view, action
+from rest_framework.generics import CreateAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -76,6 +77,18 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return JsonResponse({'testing': 'my custom function'})
 
 
+@extend_schema_view(
+    post=extend_schema(
+        description='aaaaa',
+        summary="wwwww",
+        tags=["A"],
+    ),
+)
+class Some(CreateAPIView):
+    def post(self, request: WSGIRequest) -> JsonResponse:
+        return JsonResponse({'testing': 'some class + clear metgod'})
+
+
 @extend_schema(
     description='Override a specific method',
     tags=["Group"]
@@ -89,9 +102,37 @@ class GroupViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated]
 
 
-@extend_schema(
-    description='Override a specific method',
-    tags=["User"],
+@extend_schema_view(
+    list=extend_schema(
+        description='Получение всех пользователей',
+        summary="Получение всех пользователей",
+        tags=["Пользователи"],
+    ),
+    create=extend_schema(
+        description='Создание пользователя',
+        summary="Создание пользователя",
+        tags=["Пользователи"],
+    ),
+    retrieve=extend_schema(
+        description="Получение пользователя по идентификатору 'id'",
+        summary="Получение пользователя по идентификатору 'id'",
+        tags=["Пользователи"],
+    ),
+    update=extend_schema(
+        description="Обновление пользователя по идентификатору 'id'",
+        summary="Обновление пользователя по идентификатору 'id'",
+        tags=["Пользователи"],
+    ),
+    partial_update=extend_schema(
+        description="Частичное обновление пользователя по идентификатору 'id'",
+        summary="Частичное обновление пользователя по идентификатору 'id'",
+        tags=["Пользователи"],
+    ),
+    destroy=extend_schema(
+        description="Удаление пользователя по идентификатору 'id'",
+        summary="Удаление обновление пользователя по идентификатору 'id'",
+        tags=["Пользователи"],
+    ),
 )
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -132,9 +173,3 @@ class UserViewSet(viewsets.ModelViewSet):
     # @action(methods=['GET'], detail=False)
     # def clear(request: WSGIRequest) -> JsonResponse:
     #     return JsonResponse({'testing': 'my custom function'})
-
-
-# class SnippetNewSerializer(viewsets.ViewSet):
-#     @action(methods=['GET'], detail=False)
-#     def clear(request: WSGIRequest) -> JsonResponse:
-#         return JsonResponse({'testing': 'my custom function'})

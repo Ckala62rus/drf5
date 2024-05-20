@@ -20,6 +20,8 @@ urlpatterns = [
     # path('test/', views.SnippetNewSerializer.clear, name="instances"),
     path('test/', views.CategoryViewSet.clear, name="instances"),
 
+    path('some/', views.Some.as_view(), name="A"),
+
     path('posts/', views.PostViewSet.as_view({
         'get': 'list',
         'post': 'create'

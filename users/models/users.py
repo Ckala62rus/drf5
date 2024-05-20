@@ -5,7 +5,7 @@ from users.managers import CustomUserManager
 
 
 class User(AbstractUser):
-    # USERNAME_FIELD = "username"
+    USERNAME_FIELD = "username"
     # REQUIRED_FIELDS =
 
     # Временная метка создания объекта.
