@@ -4,17 +4,12 @@ from django.http import JsonResponse
 
 from drf_spectacular.utils import extend_schema, extend_schema_view
 
-from rest_framework import viewsets, permissions, status
-from rest_framework.authentication import TokenAuthentication
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.serializers import CategorySerializer, GroupSerializer, UserSerializer, PostSerializer
+from api.serializers import CategorySerializer, GroupSerializer, PostSerializer
 from blog.models import Categories, Posts
-from users.models.users import User
-from users.serializers.api.user_serializer import UserMeSerializer
 
 
 # Create your views here.
@@ -45,28 +40,20 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         return super().list(self, request, *args, **kwargs)
-        # queryset = self.filter_queryset(self.get_queryset())
-        #
-        # page = self.paginate_queryset(queryset)
-        # if page is not None:
-        #     serializer = self.get_serializer(page, many=True)
-        #     return self.get_paginated_response({'data': serializer.data, "test": 'hello world'})
-        #
-        # serializer = self.get_serializer(queryset, many=True)
-        # return Response(serializer.data,)
-
-    # def update(self, request, *args, **kwargs):
-        # pass
 
 
-@extend_schema(
-    description='Override a specific method',
-    tags=["Categories"]
+@extend_schema_view(
+    create=extend_schema(description='Создание категории', summary='Создание категории', tags=['Категории']),
+    list=extend_schema(description='Получение всех категорий', summary='Получение всех категорий', tags=['Категории']),
+    retrieve=extend_schema(description='Получение категории по id', summary='Получение категории по id', tags=['Категории']),
+    update=extend_schema(description='Обновление категории по id', summary='Обновление категории по id', tags=['Категории']),
+    partial_update=extend_schema(description='Частичное обновление категории по id', summary='Частичное обновление категории по id', tags=['Категории']),
+    destroy=extend_schema(description='Удаление категории по id', summary='Удаление категории по id', tags=['Категории']),
+    clear=extend_schema(description='Common method in class', summary='Common method in class', tags=['Категории']),
 )
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     queryset = Categories.objects.all()
-    # permission_classes = [permissions.IsAuthenticated]
 
     @action(methods=['GET'], detail=False)
     def clear(self, request: WSGIRequest) -> JsonResponse:
@@ -83,4 +70,3 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
-    # permission_classes = [permissions.IsAuthenticated]

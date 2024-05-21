@@ -79,7 +79,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema_view(
-    post=extend_schema(
+    get=extend_schema(
         description="Get current user model",
         summary="Get current user model",
         tags=["Пользователи"],
@@ -88,9 +88,12 @@ class UserViewSet(viewsets.ModelViewSet):
 class Me(CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request: WSGIRequest) -> JsonResponse:
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return UserMeSerializer
+
+    def get(self, request: WSGIRequest) -> JsonResponse:
         user = request.user
         serializer = UserMeSerializer(data=user.__dict__)
         serializer.is_valid(raise_exception=True)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2MzEzOTM2LCJpYXQiOjE3MTYyMjc1MzYsImp0aSI6IjdjMTc1ODIzMGYwMTRmOGNhZjRkZTgyNjViOGQ2Nzc3IiwidXNlcl9pZCI6MX0.JujZghyItKXQlGm_c2l5jKoOdxOCX7y1gTLSdyE66pg
