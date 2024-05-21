@@ -6,11 +6,10 @@ from blog.views import (
     CategoryViewSet,
     GroupViewSet,
     PostViewSet,
-    UserViewSet,
-    Me,
 )
 
 from users.urls import urlpatterns as user_u
+from users.views import UserViewSet
 
 router = DefaultRouter()
 router.register("categories", CategoryViewSet)
@@ -28,7 +27,6 @@ urlpatterns = [
 
     # path('test/', views.SnippetNewSerializer.clear, name="instances"),
     path('test/', CategoryViewSet.clear, name="instances"),
-    path('me/', Me.as_view(), name="Пользователи"),
 
     path('posts/', PostViewSet.as_view({
         'get': 'list',
