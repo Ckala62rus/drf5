@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, status
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from django.http import JsonResponse
@@ -85,15 +85,22 @@ class UserViewSet(viewsets.ModelViewSet):
         tags=["Пользователи"],
     ),
 )
-class Me(CreateAPIView):
+class Me(RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    queryset = User.objects.all()
+    serializer_class = UserMeSerializer
+
+    # Так как RetrieveAPIView ищет обьект по id, мы меняем это поведение
+    # Передав модель залогиненного пользователя
+    def get_object(self):
+        return self.request.user
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
             return UserMeSerializer
 
-    def get(self, request: WSGIRequest) -> JsonResponse:
-        user = request.user
-        serializer = UserMeSerializer(data=user.__dict__)
-        serializer.is_valid(raise_exception=True)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+    # def get(self, request: WSGIRequest) -> JsonResponse:
+    #     user = request.user
+    #     serializer = UserMeSerializer(data=user.__dict__)
+    #     serializer.is_valid(raise_exception=True)
+    #     return JsonResponse(serializer.data, status=status.HTTP_200_OK)
