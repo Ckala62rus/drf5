@@ -10,6 +10,8 @@ from blog.views import (
     Me,
 )
 
+from users.urls import urlpatterns as user_u
+
 router = DefaultRouter()
 router.register("categories", CategoryViewSet)
 router.register("groups", GroupViewSet)
@@ -33,5 +35,7 @@ urlpatterns = [
         'post': 'create'
     }), name="Posts"),
 ]
+
+urlpatterns += user_u
 
 urlpatterns.extend(router.urls)
