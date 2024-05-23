@@ -275,9 +275,9 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'},
     },
     "handlers": {
-        # "console": {
-        #     "class": "logging.StreamHandler",
-        # },
+        "console": {
+            "class": "logging.StreamHandler",
+        },
         "file": {
             "level": "INFO",
             "class": "logging.FileHandler",
@@ -294,8 +294,8 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
-            "propagate": False,
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": True,
         },
     },
 }
