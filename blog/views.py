@@ -77,17 +77,9 @@ class MyPermission(BasePermission):
         # Determine the required groups for this particular request method.
         required_groups = required_groups_mapping.get(request.method, [])
 
-        user = request.user
-
-        if user.is_authenticated:
-            if user.is_superuser:
-                return True
-
-            for group in required_groups:
-                if not self.is_in_group(user, group):
-                    return False
-
-        return True
+        # Return True if the user has all the required groups or is staff.
+        return all([self.is_in_group(request.user, group_name) if group_name != "__all__" else True for group_name in
+                    required_groups]) or (request.user and request.user.is_staff)
 
     def is_in_group(self, user, group_name):
         """
@@ -111,5 +103,10 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [IsAuthenticated, MyPermission]
     required_groups = {
-        'GET': ['moderator'],
+        # 'GET': ["moderator"],
+        'GET': ["moderator"],
+        'POST': ["__all__"],
+        'PUT': ["__all__"],
+        'PATCH': ["__all__"],
+        'DELETE': ["__all__"],
     }
