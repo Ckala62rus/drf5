@@ -1,4 +1,6 @@
 from django.contrib.auth.models import Group
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from blog.models import Categories, Posts
@@ -41,9 +43,11 @@ class PostSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_created_at(self, post):
         return post.created_at.strftime('%Y-%m-%d %H:%M:%S')
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_updated_at(self, post):
         return post.updated_at.strftime('%Y-%m-%d %H:%M:%S')
 

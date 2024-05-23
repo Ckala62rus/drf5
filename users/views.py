@@ -19,6 +19,7 @@ from users.serializers.api.user_serializer import ChangePasswordSerializer
 @extend_schema_view(
     post=extend_schema(
         request=ChangePasswordSerializer,
+        responses=None,
         summary='Смена пароля', tags=['Пользователи']),
 )
 class ChangePasswordView(APIView):
