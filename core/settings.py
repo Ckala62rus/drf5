@@ -271,19 +271,23 @@ LOGGING = {
             # точный формат не важен, это минимальная информация
             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
         },
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'},
     },
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
+        # "console": {
+        #     "class": "logging.StreamHandler",
+        # },
         "file": {
-            "level": "DEBUG",
+            "level": "INFO",
             "class": "logging.FileHandler",
             "filename": "debug.log",
+            'formatter': 'standard',
         },
     },
     "root": {
-        "handlers": ["console", "file"],
+        # "handlers": ["console", "file"],
+        "handlers": ["file"],
         # "handlers": ["console"],
         "level": "DEBUG",
     },
