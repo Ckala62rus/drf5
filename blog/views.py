@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.models import Group
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import JsonResponse
@@ -33,12 +35,17 @@ class PostViewSet(viewsets.ModelViewSet):
         description="Create new post and return model"
     )
     def create(self, request, *args, **kwargs):
-        serializer = PostSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            serializer = PostSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as ex:
+            logging.exception(ex)
+
 
     def list(self, request, *args, **kwargs):
+        logging.info("hello world!")
         return super().list(self, request, *args, **kwargs)
 
 

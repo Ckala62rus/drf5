@@ -27,6 +27,7 @@ class PostSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField('get_created_at')
     updated_at = serializers.SerializerMethodField('get_updated_at')
     category = CategorySerializer(many=False, read_only=True)
+    category_id = serializers.IntegerField(required=True, write_only=True)
 
     class Meta:
         model = Posts
@@ -49,7 +50,7 @@ class PostSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         name = validated_data.get('name')
         description = validated_data.get('description')
-        category_id = validated_data.get('category_id').id
+        category_id = validated_data.get('category_id')
         return Posts.objects.create(
             name=name,
             description=description,
