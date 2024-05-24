@@ -29,3 +29,7 @@
 5. go to user directory => cd /home/call_helper
 6. install certbot => sudo api install certbot python3-certbot-nginx
 7. sudo certbot --nginx
+
+#### Make and Load fixtures
+1. make from concrete application => python .\manage.py dumpdata blog.categories > categories.json
+2. 
