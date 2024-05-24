@@ -8,11 +8,12 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from api.serializers import CategorySerializer, GroupSerializer, PostSerializer
 from blog.models import Categories, Posts
+from blog.permissions import BaseApiPermission
 
 
 # Create your views here.
@@ -68,29 +69,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return JsonResponse({'testing': 'my custom function'})
 
 
-class MyPermission(BasePermission):
-    def has_permission(self, request, view):
-
-        # Get a mapping of methods -> required group.
-        required_groups_mapping = getattr(view, "required_groups", {})
-
-        # Determine the required groups for this particular request method.
-        required_groups = required_groups_mapping.get(request.method, [])
-
-        # Return True if the user has all the required groups or is staff.
-        return all([self.is_in_group(request.user, group_name) if group_name != "__all__" else True for group_name in
-                    required_groups]) or (request.user and request.user.is_staff)
-
-    def is_in_group(self, user, group_name):
-        """
-        Takes a user and a group name, and returns `True` if the user is in that group.
-        """
-        try:
-            return Group.objects.get(name=group_name).user_set.filter(id=user.id).exists()
-        except Group.DoesNotExist:
-            return None
-
-
 @extend_schema(
     description='Override a specific method',
     tags=["Group"]
@@ -101,9 +79,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
-    permission_classes = [IsAuthenticated, MyPermission]
+    permission_classes = [IsAuthenticated, BaseApiPermission]
     required_groups = {
-        # 'GET': ["moderator"],
         'GET': ["moderator"],
         'POST': ["__all__"],
         'PUT': ["__all__"],
