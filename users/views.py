@@ -1,14 +1,12 @@
-from django.core.handlers.wsgi import WSGIRequest
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
-from rest_framework import viewsets, permissions, status
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework import viewsets, permissions
+from rest_framework.generics import RetrieveAPIView
 
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from django.http import JsonResponse
 
-from api.serializers import UserSerializer
+from users.serializers.api.user_serializer import UserSerializer
 from users.models.users import User
 from users.serializers.api.user_serializer import UserMeSerializer
 from users.serializers.api.user_serializer import ChangePasswordSerializer
@@ -33,8 +31,6 @@ class ChangePasswordView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=HTTP_204_NO_CONTENT)
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2MzYxMzE5LCJpYXQiOjE3MTYyNzQ5MTksImp0aSI6IjA3ZjE5ZDhjODgyNTQ4MmRhNzIzYjM3Y2ExY2VlY2YyIiwidXNlcl9pZCI6MX0.4Els0XpvYfHbOoB9HXHkSgDlIs_4lP9OEUr8IvHIL1c
-# pbkdf2_sha256$720000$Dm740NKSKCvuXXPefn9IwK$OIBCH10l5qjBkuGyJdfP+nLVQtayVHFQaa54OytdEV0=
 
 
 # Create your models here.

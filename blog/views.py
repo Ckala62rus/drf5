@@ -11,7 +11,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.serializers import CategorySerializer, GroupSerializer, PostSerializer
+from users.serializers.api.user_serializer import CategorySerializer, GroupSerializer, PostSerializer
 from blog.models import Categories, Posts
 from blog.permissions import BaseApiPermission
 
