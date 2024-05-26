@@ -101,3 +101,8 @@ class PostSerializer(serializers.ModelSerializer):
             description=description,
             category_id=category_id
         )
+
+    def validate_category_id(self, value):
+        if value == 0:
+            raise serializers.ValidationError({"category_id": "Category id cannot be 0"})
+        return value
