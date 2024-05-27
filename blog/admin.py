@@ -61,8 +61,17 @@ class PostAdmin(admin.ModelAdmin):
     category_link.short_description = 'Категория'
 
     def save_model(self, request, obj, form, change):
+        """
+        Given a model instance save it to the database.
+        """
         super().save_model(request, obj, form, change)
         print("model is updated")
+
+    def delete_model(self, request, obj):
+        """
+        Given a model instance delete it from the database.
+        """
+        obj.delete()
 
 
 admin.site.register(Categories, CategoryAdmin)
