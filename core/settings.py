@@ -146,6 +146,9 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+###############################
+# DRF CONFIG
+###############################
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -230,6 +233,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_TEST_ROOT = os.path.join(BASE_DIR, 'media/test/')
 
 
+###############################
+# DJOSER JWT AUTHENTICATION
+###############################
+
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
@@ -262,6 +269,10 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }
+
+###############################
+# LOGING
+###############################
 
 LOGGING = {
     "version": 1,
