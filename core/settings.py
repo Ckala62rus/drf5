@@ -273,6 +273,7 @@ SIMPLE_JWT = {
 ###############################
 # LOGING
 ###############################
+LOGGING_ROOT = os.path.join(STATIC_ROOT, 'logging')
 
 LOGGING = {
     "version": 1,
@@ -295,10 +296,17 @@ LOGGING = {
             "filename": "debug.log",
             'formatter': 'standard',
         },
+        'celery': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': "celery_cron.log",
+            'formatter': 'standard',
+        },
     },
     "root": {
         # "handlers": ["console", "file"],
-        "handlers": ["file"],
+        # "handlers": ["file"],
+        "handlers": ["console", "file", "celery"],
         # "handlers": ["console"],
         "level": "DEBUG",
     },
@@ -307,6 +315,11 @@ LOGGING = {
             "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "propagate": True,
+        },
+        'celery_cron': {
+            'handlers': ['celery'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
     },
 }
