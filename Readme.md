@@ -32,4 +32,9 @@
 
 #### Make and Load fixtures
 1. make from concrete application => python .\manage.py dumpdata blog.categories > categories.json
-2. 
+
+#### Celery
+1. start Celery Worker => celery -A core worker --loglevel=info -P eventlet
+2. start Celery Flower => celery -A core flower --port=5555 --loglevel=info
+3. start Celery Beat   => celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+4. 

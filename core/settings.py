@@ -46,6 +46,7 @@ INSTALLED_APPS += [
     "corsheaders",
     'djoser',
     'django_celery_results',
+    'django_celery_beat',
 ]
 
 # applications
