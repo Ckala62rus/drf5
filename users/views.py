@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
@@ -10,6 +12,7 @@ from users.serializers.api.user_serializer import UserSerializer
 from users.models.users import User
 from users.serializers.api.user_serializer import UserMeSerializer
 from users.serializers.api.user_serializer import ChangePasswordSerializer
+from users.user_service import email_notification
 
 
 # Create your views here.
@@ -90,11 +93,20 @@ class Me(RetrieveAPIView):
     # Так как RetrieveAPIView ищет обьект по id, мы меняем это поведение
     # Передав модель залогиненного пользователя
     def get_object(self):
+        log = logging.getLogger(__name__)
+        log.info("new logger")
         return self.request.user
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
             return UserMeSerializer
+
+    def get(self, request, *args, **kwargs):
+        email_notification.delay(
+            "some text for test queue celery",
+            "admin@mail.ru"
+        )
+        return self.retrieve(request, *args, **kwargs)
 
     # def get(self, request: WSGIRequest) -> JsonResponse:
     #     user = request.user

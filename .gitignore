@@ -17,3 +17,5 @@ media/
 *\migrations\*
 !*\migrations\__init__.py
 debug.log
+
+packages_downloaded
