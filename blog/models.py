@@ -1,5 +1,8 @@
 from django.db import models
 
+from users.models.users import User
+
+
 # Create your models here.
 
 
@@ -71,3 +74,38 @@ class Posts(models.Model):
 
     def __str__(self):
         return self.name + ': ' + str(self.pk)
+
+
+def upload_to(instance, filename):
+    return '/'.join(['images', str(instance.post.name), filename])
+
+
+class PostImage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Posts,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image = models.ImageField(
+        blank=True,
+        null=True,
+        upload_to=upload_to
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+    )
+
+    class Meta:
+        db_table = "post_images"
+        verbose_name = "Картинка"
+        verbose_name_plural = "Картинки"
+        ordering = ('id',)
+
+    def __str__(self):
+        return str(self.post) + ': ' + str(self.pk)

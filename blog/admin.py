@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
-from blog.models import Categories, Posts
+from blog.models import Categories, Posts, PostImage
 
 
 # Register your models here.
@@ -74,5 +74,10 @@ class PostAdmin(admin.ModelAdmin):
         obj.delete()
 
 
+class PostImageAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Categories, CategoryAdmin)
 admin.site.register(Posts, PostAdmin)
+admin.site.register(PostImage, PostImageAdmin)

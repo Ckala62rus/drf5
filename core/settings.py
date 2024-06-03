@@ -157,6 +157,13 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
 
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FileUploadParser',
+    ],
+
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
@@ -203,6 +210,8 @@ SPECTACULAR_SETTINGS = {
     'SERVE_AUTHENTICATION': [
         'rest_framework.authentication.BasicAuthentication',
     ],
+
+    'COMPONENT_SPLIT_REQUEST': True,
 
     # 'SERVE_PERMISSIONS': [
     #     'rest_framework.permissions.IsAuthenticated',
