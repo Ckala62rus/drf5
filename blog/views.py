@@ -1,3 +1,4 @@
+import http
 import logging
 
 from django.contrib.auth.models import Group
@@ -6,12 +7,13 @@ from django.http import JsonResponse
 
 from drf_spectacular.utils import extend_schema, extend_schema_view
 
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, parsers
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from users.serializers.api.user_serializer import CategorySerializer, GroupSerializer, PostSerializer
+from users.serializers.api.user_serializer import CategorySerializer, GroupSerializer
+from blog.serializers.PostSerializer import PostSerializer
 from blog.models import Categories, Posts
 from blog.permissions import BaseApiPermission
 
@@ -31,6 +33,8 @@ from blog.permissions import BaseApiPermission
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Posts.objects.all()
     serializer_class = PostSerializer
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
         summary="Create post",

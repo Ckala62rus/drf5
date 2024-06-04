@@ -14,7 +14,11 @@ class PostSerializer(serializers.ModelSerializer):
     updated_at = serializers.SerializerMethodField('get_updated_at')
     category = CategorySerializer(many=False, read_only=True)
     category_id = serializers.IntegerField(required=True, write_only=True)
-    image = serializers.ImageField(required=False)
+
+    uploaded_images = serializers.ListField(
+        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
+        write_only=True
+    )
     images = PostImageSerializer(many=True, read_only=True)
 
     class Meta:
@@ -25,8 +29,8 @@ class PostSerializer(serializers.ModelSerializer):
             'description',
             'category_id',
             'category',
-            'image',
             'images',
+            'uploaded_images',
             'created_at',
             'updated_at'
         ]
@@ -40,24 +44,17 @@ class PostSerializer(serializers.ModelSerializer):
         return post.updated_at.strftime('%Y-%m-%d %H:%M:%S')
 
     def create(self, validated_data):
-        upload_images = validated_data.pop("image")
+        upload_images = validated_data.pop("uploaded_images")
 
         with transaction.atomic():
-            name = validated_data.get('name')
-            description = validated_data.get('description')
-            category_id = validated_data.get('category_id')
-            post = Posts.objects.create(
-                name=name,
-                description=description,
-                category_id=category_id
-            )
+            post = Posts.objects.create(**validated_data)
 
-            PostImage.objects.create(
-                # name=name,
-                post=post,
-                user=User.objects.filter(pk=1).first(),
-                image=upload_images
-            )
+            for img in upload_images:
+                PostImage.objects.create(
+                    post=post,
+                    user=User.objects.filter(pk=1).first(),
+                    image=img
+                )
 
         return post
 

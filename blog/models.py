@@ -77,7 +77,14 @@ class Posts(models.Model):
 
 
 def upload_to(instance, filename):
-    return '/'.join(['images', str(instance.post.name), filename])
+    """ /images/posts/{post_id}/images/some-file.jpg """
+    return '/'.join([
+        'images',
+        "posts",
+        str(instance.post.id),
+        "images",
+        filename
+    ])
 
 
 class PostImage(models.Model):
