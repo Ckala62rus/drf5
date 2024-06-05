@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.safestring import mark_safe
 
 from users.models.users import User
 
@@ -73,7 +74,7 @@ class Posts(models.Model):
         ordering = ('id',)
 
     def __str__(self):
-        return self.name + ': ' + str(self.pk)
+        return self.name + ': ' + f"({str(self.pk)})"
 
 
 def upload_to(instance, filename):
@@ -114,5 +115,12 @@ class PostImage(models.Model):
         verbose_name_plural = "Картинки"
         ordering = ('id',)
 
+    @property
+    def thumbnail_preview(self):
+        if self.image:
+            return mark_safe('<img src="{}" width="300" height="300" />'.format(self.image.url))
+        return ""
+
     def __str__(self):
-        return str(self.post) + ': ' + str(self.pk)
+        # return str(self.post.name) + ': ' + str(self.pk)
+        return 'id : ' + str(self.pk)

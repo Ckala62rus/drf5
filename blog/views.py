@@ -48,7 +48,7 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as ex:
             logging.exception(ex)
-
+            return Response({"error": str(ex)}, status=http.HTTPStatus.OK)
 
     def list(self, request, *args, **kwargs):
         logging.info("hello world!")
