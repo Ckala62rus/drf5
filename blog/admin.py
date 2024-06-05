@@ -1,4 +1,6 @@
-from django.contrib import admin
+from gettext import ngettext
+
+from django.contrib import admin, messages
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -58,19 +60,9 @@ class PostImagesInline(admin.TabularInline):
     thumbnail_preview.allow_tags = True
 
 
-@admin.action(description="publish post")
-def make_published_post(modeladmin, request, queryset):
-    queryset.update(is_active=True)
-
-
-@admin.action(description="unpublish post")
-def make_unpublished_post(modeladmin, request, queryset):
-    queryset.update(is_active=False)
-
-
 class PostAdmin(admin.ModelAdmin):
     save_on_top = True
-    actions = [make_published_post, make_unpublished_post]
+    actions = ['make_published_post', 'make_unpublished_post']
     fields = [
         'name',
         'description',
@@ -92,14 +84,40 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['is_active', 'category']
     inlines = [PostImagesInline]
 
+    @admin.action(description="Mark selected stories as published")
+    def make_published_post(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(
+            request,
+            ngettext(
+                "%d post was successfully marked as published.",
+                "%d posts were successfully marked as published.",
+                updated,
+            )
+            % updated,
+            messages.SUCCESS,
+        )
+
+    @admin.action(description="Mark selected stories as unpublished")
+    def make_unpublished_post(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(
+            request,
+            ngettext(
+                "%d post was successfully marked as unpublished.",
+                "%d posts were successfully marked as unpublished.",
+                updated,
+            )
+            % updated,
+            messages.SUCCESS,
+        )
+
     def category_link(self, obj):
         link = reverse(
             "admin:blog_categories_change",
             args=[obj.category_id]
         )
         return format_html('<a href="{}">{}</a>', link, obj.category.name)
-
-    category_link.short_description = 'Категория'
 
     def save_model(self, request, obj, form, change):
         """
@@ -113,6 +131,8 @@ class PostAdmin(admin.ModelAdmin):
         Given a model instance delete it from the database.
         """
         obj.delete()
+
+    category_link.short_description = 'Категория'
 
 
 class PostImageAdmin(admin.ModelAdmin):
