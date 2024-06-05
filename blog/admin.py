@@ -58,7 +58,19 @@ class PostImagesInline(admin.TabularInline):
     thumbnail_preview.allow_tags = True
 
 
+@admin.action(description="publish post")
+def make_published_post(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+
+@admin.action(description="unpublish post")
+def make_unpublished_post(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+
 class PostAdmin(admin.ModelAdmin):
+    save_on_top = True
+    actions = [make_published_post, make_unpublished_post]
     fields = [
         'name',
         'description',
