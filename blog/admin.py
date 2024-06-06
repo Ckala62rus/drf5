@@ -63,6 +63,9 @@ class PostImagesInline(admin.TabularInline):
 class PostAdmin(admin.ModelAdmin):
     save_on_top = True
     actions = ['make_published_post', 'make_unpublished_post']
+
+    search_fields = ['name']
+
     fields = [
         'name',
         'description',
